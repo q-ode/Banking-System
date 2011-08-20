@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
+import com.nland.ebank.common.BankAccountException;
+import com.nland.ebank.common.InsufficientFundsException;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Account.
@@ -82,9 +85,7 @@ public abstract class Account {
 	 *
 	 * @param nuban the new nuban
 	 */
-	public synchronized void setNuban(String nuban) {
-		this.nuban = nuban;
-	}
+	public abstract synchronized void setNuban(String nuban) throws BankAccountException;
 
 	/**
 	 * Gets the owner.
@@ -100,9 +101,7 @@ public abstract class Account {
 	 *
 	 * @param owner the new owner
 	 */
-	public synchronized void setOwner(Customer owner) {
-		this.owner = owner;
-	}
+	public abstract synchronized void setOwner(Customer owner) throws BankAccountException;
 
 	/**
 	 * Gets the joint owners.
@@ -118,11 +117,7 @@ public abstract class Account {
 	 *
 	 * @param jointOwners the new joint owners
 	 */
-	public void setJointOwner(Customer jointOwner) {
-		synchronized(jointOwners) {
-			this.jointOwners.add(jointOwner);
-		}
-	}
+	public abstract void setJointOwner(Customer jointOwner) throws BankAccountException;
 
 	/**
 	 * Gets the date the account was opened
@@ -170,11 +165,7 @@ public abstract class Account {
 	/**
 	 * @param t The transaction to be added
 	 */
-	public void addTransaction(Transaction t) {
-		synchronized(transactions) {
-			this.transactions.add(t);
-		}
-	}
+	public abstract void addTransaction(Transaction t) throws BankAccountException;
 
 	/**
 	 * @param amount
@@ -191,10 +182,5 @@ public abstract class Account {
 	 * @param amount
 	 * @return The new current balance
 	 */
-	public BigDecimal debit(BigDecimal amount) {
-		synchronized(currentBalance) {
-			currentBalance.subtract(amount);
-		}
-		return currentBalance;
-	}
+	public abstract BigDecimal debit(BigDecimal amount) throws InsufficientFundsException;
 }
